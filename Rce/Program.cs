@@ -10,13 +10,18 @@ namespace Rce
         {
             string rce = "x3 - 4,5x2 + 5x - 1,5 = 0";
             Calculations();
+
+            Console.ReadLine();
         }
 
 
         public static void Calculations()
         {
             Dictionary<Points, Points> dd = FindRoots();
-            //Roots(dd);
+            foreach (var item in Roots(dd))
+            {
+                Console.WriteLine(item);
+            }
         }
 
         private static Dictionary<Points, Points> FindRoots()
@@ -30,7 +35,7 @@ namespace Rce
             }
 
             int index = 0;
-           Dictionary<Points, Points> sortedPoints = new Dictionary<Points, Points>();
+            Dictionary<Points, Points> sortedPoints = new Dictionary<Points, Points>();
             while (index < points.Count - 1)
             {
                 if (points.ElementAt(index).Y * points.ElementAt(index + 1).Y < 0)
@@ -40,7 +45,6 @@ namespace Rce
 
                 index++;
             }
-
             return sortedPoints;
         }
 
@@ -50,27 +54,31 @@ namespace Rce
 
             foreach (var item in sortedPoints)
             {
-                double from = item.Key.Y;
-                double to = item.Value.Y;
-                double d = (from + to) / 2;
-                double dist = double.MaxValue;
+                double fromY = item.Key.Y;
+                double toY = item.Value.Y;
+                double fromX = item.Key.X;
+                double toX = item.Value.X;
+                double halfOfX = (fromX + toX) / 2;
+                double halfOfY = (fromY + toY) / 2;
+                double dist = Math.Abs(toY - fromY);
 
-                while (Math.Abs(dist) > 0.001)
+                while (dist > 0.00000000000000000000000000000000000000000000000000000000000000000000000000000000000000001)
                 {
-                    d = (from + to) / 2;
-                    //dist = 
-
-                    if (d * from < 0)
+                    halfOfX = (fromX + toX) / 2;
+                    halfOfY = (fromY + toY) / 2;
+                    dist = Math.Abs(toY - fromY);
+                    if (halfOfY * fromY < 0)
                     {
-                        to = d;
+                        toX = halfOfX;
+                        toY = halfOfY;
                     }
                     else
                     {
-                        from = d;
+                        fromX = halfOfX;
+                        fromY = halfOfY;
                     }
                 }
-
-                results.Add(d);
+                results.Add(halfOfX);
             }
 
             return results;
